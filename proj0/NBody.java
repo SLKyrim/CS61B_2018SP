@@ -44,13 +44,13 @@ public class NBody {
 
     /** Draws the initial universe state (main) */
     public static void main(String[] args) {  
-        /** Get data */
-        // double T = Double.parseDouble(args[0]);
-        // double dt = Double.parseDouble(args[1]);
-        // String filename = args[2];
-        double T = 157788000.0; 
-        double dt = 25000.0;
-        String filename = "data/planets.txt";
+        /** Collecting All Needed Input */
+        double T = Double.parseDouble(args[0]);
+        double dt = Double.parseDouble(args[1]);
+        String filename = args[2];
+        // double T = 157788000.0; 
+        // double dt = 25000.0;
+        // String filename = "data/planets.txt";
         double radius = readRadius(filename);
         Planet[] planets = readPlanets(filename);
 
@@ -71,6 +71,50 @@ public class NBody {
         /** Draw Planets */
         for (Planet planet : planets) {
             planet.draw();
+        }
+
+        /** Create animation */
+        StdDraw.enableDoubleBuffering(); // prevent flickering in the animation
+        
+        for (int time = 0; time < T; time += dt) {
+            /** Create an xForces array and yForces array */
+            double[] xForces = new double[planets.length];
+            double[] yForces = new double[planets.length];
+
+            /** Calculate the net x and y forces for each planet, storing these in the xForces and yForces arrays respectively */
+            for (int i = 0; i < planets.length; i++) {
+                xForces[i] = planets[i].calcNetForceExertedByX(planets);
+                yForces[i] = planets[i].calcNetForceExertedByY(planets);
+            }
+
+            /** Call update on each of the planets. This will update each planet’s position, velocity, and acceleration. */
+            for (int i = 0; i < planets.length; i++) {
+                planets[i].update(dt, xForces[i], yForces[i]);
+            }
+
+            /** Draw the background image */
+            StdDraw.clear();
+            StdDraw.picture(0, 0, "images/starfield.jpg");
+
+            /** Draw all of the planets */
+            for (Planet planet : planets) {
+                planet.draw();
+            }
+
+            /** Show the offscreen buffer (see the show method of StdDraw) */
+            StdDraw.show();
+
+            /** Pause the animation for 10 milliseconds (see the pause method of StdDraw). You may need to tweak this on your computer */
+            StdDraw.pause(1);
+        }
+
+        /** Printing the Universe */
+        StdOut.printf("%d\n", planets.length);
+        StdOut.printf("%.2e\n", radius);
+        for (int i = 0; i < planets.length; i++) {
+            StdOut.printf("%11.4e %11.4e %11.4e %11.4e %11.4e %12s\n", 
+                          planets[i].xxPos, planets[i].yyPos, planets[i].xxVel, 
+                          planets[i].yyVel, planets[i].mass, planets[i].imgFileName);   
         }
     }
 }
