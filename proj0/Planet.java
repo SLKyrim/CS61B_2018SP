@@ -110,4 +110,9 @@ public class Planet {
         xxPos = this.xxPos + dt * xxVel;
         yyPos = this.yyPos + dt * yyVel;
     }
+
+    /** draw Planet position */
+    public void draw() {
+        StdDraw.picture(this.xxPos, this.yyPos, "images/" + this.imgFileName);
+    }
 }

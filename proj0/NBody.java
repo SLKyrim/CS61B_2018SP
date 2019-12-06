@@ -43,10 +43,14 @@ public class NBody {
     }
 
     /** Draws the initial universe state (main) */
-    public static void main(String[] args) {
-        double T = Double.parseDouble(args[0]);
-        double dt = Double.parseDouble(args[1]);
-        String filename = args[2];
+    public static void main(String[] args) {  
+        /** Get data */
+        // double T = Double.parseDouble(args[0]);
+        // double dt = Double.parseDouble(args[1]);
+        // String filename = args[2];
+        double T = 157788000.0; 
+        double dt = 25000.0;
+        String filename = "data/planets.txt";
         double radius = readRadius(filename);
         Planet[] planets = readPlanets(filename);
 
@@ -58,6 +62,15 @@ public class NBody {
         // System.out.println(dt);
         // System.out.println(radius);
 
+        /** Draw background */
+        StdDraw.setScale(-radius, radius); // Sets up the universe so it goes from (-radius, -radius) up to (radius, radius); the center of the universe is (0,0)
+        StdDraw.clear(); // Clears the drawing window
+        StdDraw.picture(0, 0, "images/starfield.jpg");
+        StdDraw.show();
         
+        /** Draw Planets */
+        for (Planet planet : planets) {
+            planet.draw();
+        }
     }
 }

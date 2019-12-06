@@ -2,37 +2,9 @@
     "configurations": [
         {
             "type": "java",
-            "name": "CodeLens (Launch) - StdDrawDemo",
+            "name": "CodeLens (Launch) - NBody",
             "request": "launch",
-            "mainClass": "examples.StdDrawDemo",
-            "projectName": "proj0_9b3d1f55"
-        },
-        {
-            "type": "java",
-            "name": "CodeLens (Launch) - BasicInDemo",
-            "request": "launch",
-            "mainClass": "examples.BasicInDemo",
-            "projectName": "proj0_9b3d1f55"
-        },
-        {
-            "type": "java",
-            "name": "CodeLens (Launch) - InDemo",
-            "request": "launch",
-            "mainClass": "examples.InDemo",
-            "projectName": "proj0_9b3d1f55"
-        },
-        {
-            "type": "java",
-            "name": "CodeLens (Launch) - TestCalcForceExertedByXY",
-            "request": "launch",
-            "mainClass": "TestCalcForceExertedByXY",
-            "projectName": "proj0_9b3d1f55"
-        },
-        {
-            "type": "java",
-            "name": "CodeLens (Launch) - TestPlanetConstructor",
-            "request": "launch",
-            "mainClass": "TestPlanetConstructor",
+            "mainClass": "NBody",
             "projectName": "proj0_9b3d1f55"
         }
     ]
