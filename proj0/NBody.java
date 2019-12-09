@@ -45,12 +45,17 @@ public class NBody {
     /** Draws the initial universe state (main) */
     public static void main(String[] args) {  
         /** Collecting All Needed Input */
-        double T = Double.parseDouble(args[0]);
-        double dt = Double.parseDouble(args[1]);
-        String filename = args[2];
-        // double T = 157788000.0; 
-        // double dt = 25000.0;
-        // String filename = "data/planets.txt";
+        
+        /* Use for gradescope.com */
+        // double T = Double.parseDouble(args[0]);
+        // double dt = Double.parseDouble(args[1]);
+        // String filename = args[2];
+        
+        /* Use for Run in local */
+        double T = 157788000.0; 
+        double dt = 25000.0;
+        String filename = "data/planets.txt";
+        
         double radius = readRadius(filename);
         Planet[] planets = readPlanets(filename);
 

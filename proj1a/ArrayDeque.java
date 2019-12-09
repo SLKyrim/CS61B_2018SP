@@ -1,0 +1,7 @@
+/**
+ * ArrayDeque
+ */
+public class ArrayDeque {
+
+    
+}

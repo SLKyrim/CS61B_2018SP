@@ -2,6 +2,27 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - test",
+            "request": "launch",
+            "mainClass": "test",
+            "projectName": "proj0_9b3d1f55"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - StdDrawDemo",
+            "request": "launch",
+            "mainClass": "examples.StdDrawDemo",
+            "projectName": "proj0_9b3d1f55"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - StdRandom",
+            "request": "launch",
+            "mainClass": "examples.StdRandom",
+            "projectName": "proj0_9b3d1f55"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - NBody",
             "request": "launch",
             "mainClass": "NBody",

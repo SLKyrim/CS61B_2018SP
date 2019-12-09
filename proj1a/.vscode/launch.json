@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - SLListLauncher",
+            "request": "launch",
+            "mainClass": "lectrue.SLListLauncher",
+            "projectName": "proj1a_cc66cbcb"
+        }
+    ]
+}
