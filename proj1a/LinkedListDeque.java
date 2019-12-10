@@ -1,20 +1,10 @@
 /**
- * LinkedListDeque class has methods which are as follows :
- * public void addFirst(T item): Adds an item of type T to the front of the deque. [no loop or recursion][constant time][Done]
- * public void addLast(T item): Adds an item of type T to the back of the deque. [no loop or recursion][constant time][Done]
- * public boolean isEmpty(): Returns true if deque is empty, false otherwise.[Done]
- * public int size(): Returns the number of items in the deque. [constant time][Done]
- * public void printDeque(): Prints the items in the deque from first to last, separated by a space.[Done]
- * public T removeFirst(): Removes and returns the item at the front of the deque. If no such item exists, returns null. [no loop or recursion][constant time][Done]
- * public T removeLast(): Removes and returns the item at the back of the deque. If no such item exists, returns null. [no loop or recursion][constant time][Done]
- * public T get(int index): Gets the item at the given index, where 0 is the front, 1 is the next item, and so forth. If no such item exists, returns null. Must not alter the deque! [Use iteration][constant time][Done]
- * public LinkedListDeque(): Creates an empty linked list deque.[Done]
- * public T getRecursive(int index): Same as get, but uses recursion.[Done]
+ * LinkedListDeque class
  */
 public class LinkedListDeque<T> {
 
     /** Nested class for node of the list. */
-    public class Node {
+    private class Node {
         public T item;
         public Node prev;
         public Node next;
@@ -26,8 +16,8 @@ public class LinkedListDeque<T> {
         }
     }
 
-    Node sentinel; // sentinel node to ensure the invariant of the list
-    int size; // caching the size of the list
+    private Node sentinel; // sentinel node to ensure the invariant of the list
+    private int size; // caching the size of the list
 
     /** Returns true if deque is empty, false otherwise. */
     public boolean isEmpty() {
@@ -37,7 +27,8 @@ public class LinkedListDeque<T> {
     /** Creates an empty linked list deque */
     public LinkedListDeque() {
         /* Don't use sentinel = new node(null, sentinel, sentinel), 
-           otherwise will cause Exception in thread "main" java.lang.NullPointerException,
+           otherwise will cause 
+           Exception in thread "main" java.lang.NullPointerException,
            don't know why yet. */
         sentinel = new Node(null, null, null);
         sentinel.next = sentinel;
@@ -59,9 +50,12 @@ public class LinkedListDeque<T> {
         size += 1;
     }
 
-    /** Removes and returns the item at the front of the deque. If no such item exists, returns null. */
+    /** Removes and returns the item at the front of the deque. 
+     * If no such item exists, returns null. */
     public T removeFirst() {
-        if (size == 0) return null;
+        if (size == 0) {
+            return null;
+        }
         T tmp = sentinel.next.item;
         sentinel.next = sentinel.next.next;
         sentinel.next.prev = sentinel;
@@ -69,9 +63,12 @@ public class LinkedListDeque<T> {
         return tmp;
     }
 
-    /** Removes and returns the item at the back of the deque. If no such item exists, returns null. */
+    /** Removes and returns the item at the back of the deque. 
+     * If no such item exists, returns null. */
     public T removeLast() {
-        if (size == 0) return null;
+        if (size == 0) {
+            return null;
+        }
         T tmp = sentinel.prev.item;
         sentinel.prev = sentinel.prev.prev;
         sentinel.prev.next = sentinel;
@@ -97,10 +94,13 @@ public class LinkedListDeque<T> {
         System.out.println();
     }
 
-    /** Use iteration to get the item at the given index, where 0 is the front, 1 is the next item, and so forth. 
+    /** Use iteration to get the item at the given index,
+     * where 0 is the front, 1 is the next item, and so forth.
      * If no such item exists, returns null. */
     public T get(int index) {
-        if (index > size - 1) return null;
+        if (index > size - 1 || index < 0) {
+            return null;
+        }
         Node curr = sentinel;
         for (int i = 0; i <= index; i++) {
             curr = curr.next;
@@ -110,11 +110,13 @@ public class LinkedListDeque<T> {
 
     /** Same as get, but uses recursion. */
     public T getRecursive(int index) {
-        if (index > size - 1) return null;
+        if (index > size - 1 || index < 0) {
+            return null;
+        }
         return getRecursive(index + 1, sentinel);
     }
     
-    /* middleman of the getRecursive */
+    /* Middleman of the getRecursive */
     private T getRecursive(int index, Node curr) {
         if (index == 0) {
             return curr.item;

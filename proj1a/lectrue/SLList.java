@@ -6,8 +6,8 @@ package lectrue;
 public class SLList<T> {
 
     private class TNode {
-        public T item;
-        public TNode next;
+        private T item;
+        private TNode next;
 
         public TNode(T i, TNode n) {
             item = i;
