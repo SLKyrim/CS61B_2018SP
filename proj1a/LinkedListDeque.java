@@ -9,7 +9,7 @@
  * public T removeLast(): Removes and returns the item at the back of the deque. If no such item exists, returns null. [no loop or recursion][constant time][Done]
  * public T get(int index): Gets the item at the given index, where 0 is the front, 1 is the next item, and so forth. If no such item exists, returns null. Must not alter the deque! [Use iteration][constant time][Done]
  * public LinkedListDeque(): Creates an empty linked list deque.[Done]
- * public T getRecursive(int index): Same as get, but uses recursion.
+ * public T getRecursive(int index): Same as get, but uses recursion.[Done]
  */
 public class LinkedListDeque<T> {
 
@@ -115,7 +115,7 @@ public class LinkedListDeque<T> {
     }
     
     /* middleman of the getRecursive */
-    public T getRecursive(int index, Node curr) {
+    private T getRecursive(int index, Node curr) {
         if (index == 0) {
             return curr.item;
         }
