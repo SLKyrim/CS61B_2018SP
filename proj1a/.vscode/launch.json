@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - LinkedListDequeTest",
+            "request": "launch",
+            "mainClass": "LinkedListDequeTest",
+            "projectName": "proj1a_cc66cbcb"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - SLListLauncher",
             "request": "launch",
             "mainClass": "lectrue.SLListLauncher",
