@@ -23,7 +23,7 @@ public class Palindrome {
         return true;
     }
 
-    /** Returns true if the given word is a palindrome */
+    /** Returns true if the given word is a CharacterComparator palindrome */
     public boolean isPalindrome(String word, CharacterComparator cc) {
         if (word.length() == 0 || word.length() == 1) {
             return true;

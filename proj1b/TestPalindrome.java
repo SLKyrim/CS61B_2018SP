@@ -27,10 +27,17 @@ public class TestPalindrome {
         OffByOne obo = new OffByOne();
         assertTrue(palindrome.isPalindrome("flake", obo));
         assertTrue(palindrome.isPalindrome("smelt", obo));
-        assertTrue(palindrome.isPalindrome("a", obo));
         assertTrue(palindrome.isPalindrome("", obo));
         assertTrue(palindrome.isPalindrome("a", obo));
         assertFalse(palindrome.isPalindrome("aa", obo));
         assertFalse(palindrome.isPalindrome("aaa", obo));
+
+        OffByN obo5 = new OffByN(5);
+        assertTrue(palindrome.isPalindrome("", obo5));
+        assertTrue(palindrome.isPalindrome("a", obo5));
+        assertFalse(palindrome.isPalindrome("aa", obo5));
+        assertFalse(palindrome.isPalindrome("aaa", obo5));
+        assertTrue(palindrome.isPalindrome("tiny", obo5));
+        assertTrue(palindrome.isPalindrome("tiffany", obo5));
     }
 }

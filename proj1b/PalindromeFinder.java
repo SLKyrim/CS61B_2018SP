@@ -7,10 +7,11 @@ public class PalindromeFinder {
         Palindrome palindrome = new Palindrome();
 
         OffByOne obo = new OffByOne();
+        OffByN obo5 = new OffByN(5);
 
         while (!in.isEmpty()) {
             String word = in.readString();
-            if (word.length() >= minLength && palindrome.isPalindrome(word, obo)) {
+            if (word.length() >= minLength && palindrome.isPalindrome(word, obo5)) {
                 System.out.println(word);
             }
         }
