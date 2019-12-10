@@ -59,7 +59,7 @@ public class ArrayDeque<T> {
 
     /** Upsize the array when it is full. */
     private void downsize() {
-        resize(size / 2);
+        resize(items.length / 2);
     }
 
     /** Removes and returns the item at the back of the deque. 
