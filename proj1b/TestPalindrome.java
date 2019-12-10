@@ -1,3 +1,4 @@
+import com.sun.tools.javac.Main;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -22,5 +23,14 @@ public class TestPalindrome {
         assertTrue(palindrome.isPalindrome("noon"));
         assertTrue(palindrome.isPalindrome("a"));
         assertTrue(palindrome.isPalindrome(""));
+
+        OffByOne obo = new OffByOne();
+        assertTrue(palindrome.isPalindrome("flake", obo));
+        assertTrue(palindrome.isPalindrome("smelt", obo));
+        assertTrue(palindrome.isPalindrome("a", obo));
+        assertTrue(palindrome.isPalindrome("", obo));
+        assertTrue(palindrome.isPalindrome("a", obo));
+        assertFalse(palindrome.isPalindrome("aa", obo));
+        assertFalse(palindrome.isPalindrome("aaa", obo));
     }
 }
