@@ -8,4 +8,18 @@ public class Palindrome {
         }
         return res;
     }
+
+    /** Returns true if the given word is a palindrome, and false otherwise */
+    public boolean isPalindrome(String word) {
+        if (word.length() == 0 || word.length() == 1) {
+            return true;
+        }
+        Deque<Character> ad = wordToDeque(word);
+        while (ad.size() > 1) {
+            if (!ad.removeFirst().equals(ad.removeLast())) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
