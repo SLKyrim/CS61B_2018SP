@@ -83,9 +83,45 @@ public class LinkedListDequeTest {
 		
 	}
 
+	/** Test for get() */
+	public static void getTest() {
+
+		System.out.println("Running get test.");
+
+		LinkedListDeque<Integer> lld1 = new LinkedListDeque<Integer>();
+		lld1.addLast(0);
+		lld1.addLast(1);
+		lld1.addLast(2);
+		lld1.addLast(3);
+		lld1.addLast(4);
+		
+		boolean passed = checkGet(4, lld1.get(4));
+		passed = checkGet(0, lld1.get(0)) && passed;
+		passed = checkGet(2, lld1.get(2)) && passed;
+
+		printTestStatus(passed);
+
+		System.out.println("Running getRecursive test.");
+
+		boolean passed2 = checkGet(4, lld1.getRecursive(4));
+		passed2 = checkGet(0, lld1.getRecursive(0)) && passed2;
+		passed2 = checkGet(2, lld1.getRecursive(2)) && passed2;
+
+		printTestStatus(passed2);
+	}
+
+	public static boolean checkGet(int expected, int actual) {
+		if (expected != actual) {
+			System.out.println("get() returned " + actual + ", but expected: " + expected);
+			return false;
+		}
+		return true;
+	}
+
 	public static void main(String[] args) {
 		System.out.println("Running tests.\n");
 		addIsEmptySizeTest();
 		addRemoveTest();
+		getTest();
 	}
 } 
