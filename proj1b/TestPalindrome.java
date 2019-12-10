@@ -1,4 +1,3 @@
-import com.sun.tools.javac.Main;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
