@@ -93,13 +93,12 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> {
             time = 0;
         }
 
+        @Override
         public boolean hasNext() {
-            if (time < fillCount()) {
-                return true;
-            }
-            return false;
+            return time < fillCount();
         }
 
+        @Override
         public T next() {
             T res = rb[index];
             index += 1;
