@@ -30,5 +30,5 @@ public interface BoundedQueue<T> {
     }
 
     /** Return a iterator */
-     Iterator<T> iterator();
+    Iterator<T> iterator();
 }
