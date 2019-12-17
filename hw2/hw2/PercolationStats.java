@@ -12,9 +12,9 @@ public class PercolationStats {
         if (N <= 0 || T <= 0) {
             throw new IllegalArgumentException();
         }
-        xt = new double[N];
         t = T;
-        for (int i = 0; i < T; i++) {
+        xt = new double[t];
+        for (int i = 0; i < t; i++) {
             Percolation p = pf.make(N);
             while (!p.percolates()) {
                 int row = StdRandom.uniform(N);
