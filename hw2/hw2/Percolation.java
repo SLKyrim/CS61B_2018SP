@@ -8,9 +8,13 @@ public class Percolation {
     private int numOpenSites = 0; // cache the number of open sites
     private WeightedQuickUnionUF uf;
     private WeightedQuickUnionUF ufWithoutVirtualBottom; // avoid backwash from bottom
-    private int top = 0; // virtual top site to which the site connected should be full
-    private int bottom; // virtual bottom site to which the site connected can reach the bottom of grid
-    private int[][] arounds = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}}; // access the sites around this site
+
+    // virtual top site to which the site connected should be full
+    private int top = 0;
+    // virtual bottom site to which the site connected can reach the bottom of grid
+    private int bottom;
+    // access the sites around this site
+    private int[][] arounds = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
 
     /** create N-by-N grid, with all sites initially blocked */
     public Percolation(int N) {
@@ -35,15 +39,10 @@ public class Percolation {
         if (row < 0 || row >= size || col < 0 || col >= size) {
             throw new IndexOutOfBoundsException("Cannot open the site out of bounds");
         }
-
         if (!isOpen(row, col)) {
             grid[row][col] = true;
             numOpenSites += 1;
         }
-        else {
-            return; // optimize: avoid redundancy
-        }
-
         if (row == 0) {
             uf.union(xyTo1D(row, col), top);
             ufWithoutVirtualBottom.union(xyTo1D(row, col), top);
@@ -57,8 +56,8 @@ public class Percolation {
             if (aroundRow >= 0 && aroundRow < size) {
                 if (aroundCol >= 0 && aroundCol < size) {
                     if (isOpen(aroundRow, aroundCol)) {
-                        uf.union(xyTo1D(aroundRow,aroundCol), xyTo1D(row, col));
-                        ufWithoutVirtualBottom.union(xyTo1D(aroundRow,aroundCol), xyTo1D(row, col));
+                        uf.union(xyTo1D(aroundRow, aroundCol), xyTo1D(row, col));
+                        ufWithoutVirtualBottom.union(xyTo1D(aroundRow, aroundCol), xyTo1D(row, col));
                     }
                 }
             }
