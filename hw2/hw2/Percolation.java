@@ -35,10 +35,15 @@ public class Percolation {
         if (row < 0 || row >= size || col < 0 || col >= size) {
             throw new IndexOutOfBoundsException("Cannot open the site out of bounds");
         }
+
         if (!isOpen(row, col)) {
             grid[row][col] = true;
             numOpenSites += 1;
         }
+        else {
+            return; // optimize: avoid redundancy
+        }
+
         if (row == 0) {
             uf.union(xyTo1D(row, col), top);
             ufWithoutVirtualBottom.union(xyTo1D(row, col), top);
