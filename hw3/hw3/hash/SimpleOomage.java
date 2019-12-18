@@ -15,7 +15,7 @@ public class SimpleOomage implements Oomage {
     @Override
     public boolean equals(Object o) {
         // DONE: Write this method.
-        if(o.getClass() != this.getClass()) {
+        if (o.getClass() != this.getClass()) {
             return false;
         }
         SimpleOomage tmp = (SimpleOomage) o;
