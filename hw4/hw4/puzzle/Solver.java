@@ -34,7 +34,7 @@ public class Solver {
 
         @Override
         public int compareTo(SearchNode o) {
-            return o.priority - this.priority;
+            return this.priority - o.priority;
         }
     }
 
@@ -54,8 +54,8 @@ public class Solver {
             WorldState prev = currMin.getPrev();
             WorldState curr = currMin.getWorldState();
             int currMoves = currMin.getMoves();
+            tmp.push(curr);
             if (curr.isGoal()) {
-                tmp.push(curr);
                 break;
             }
             else {
@@ -64,7 +64,7 @@ public class Solver {
                         /* !neighbor.equals(prev):
                         the critical optimization to avoid same node enqueue many times
                          */
-                        searchNodes.insert(new SearchNode(neighbor, currMoves, curr));
+                        searchNodes.insert(new SearchNode(neighbor, currMoves + 1, curr));
                     }
                 }
             }
@@ -73,7 +73,6 @@ public class Solver {
         while (!tmp.isEmpty()) {
             solutions.push(tmp.pop());
         }
-
     }
 
     /** Returns the minimum number of moves to solve the
