@@ -1,6 +1,5 @@
 package hw4.puzzle;
 
-import edu.princeton.cs.algs4.MaxPQ;
 import edu.princeton.cs.algs4.Queue;
 
 public class Board implements WorldState {
@@ -150,6 +149,10 @@ public class Board implements WorldState {
         return true;
     }
 
+    public int hashCode() {
+        return 1;
+    }
+
 
     /** Returns the string representation of the board. */
     public String toString() {
@@ -158,7 +161,7 @@ public class Board implements WorldState {
         s.append(N + "\n");
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                s.append(String.format("%2d ", tileAt(i,j)));
+                s.append(String.format("%2d ", tileAt(i, j)));
             }
             s.append("\n");
         }

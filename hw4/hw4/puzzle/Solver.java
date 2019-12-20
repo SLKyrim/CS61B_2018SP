@@ -4,7 +4,8 @@ import edu.princeton.cs.algs4.MinPQ;
 import edu.princeton.cs.algs4.Stack;
 
 public class Solver {
-    Stack<WorldState> solutions = new Stack<>(); // cache the process for solution
+    // cache the process for solution
+    private Stack<WorldState> solutions = new Stack<>();
 
     /** Search Node in A* algorithm */
     private class SearchNode implements Comparable<SearchNode> {
@@ -62,8 +63,7 @@ public class Solver {
             if (currWorld.isGoal()) {
                 goal = currNode;
                 break;
-            }
-            else {
+            } else {
                 for (WorldState n : currWorld.neighbors()) {
                     if (prevNode == null || !n.equals(prevNode.getWorldState())) {
                         /* !neighbor.equals(prev):
