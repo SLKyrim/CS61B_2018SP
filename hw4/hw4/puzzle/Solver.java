@@ -10,17 +10,21 @@ public class Solver {
     private class SearchNode implements Comparable<SearchNode> {
         private WorldState curr; // world state of this search node
         private int moves; // moves so far to reach this search node (world state)
-        private WorldState prev; // previous world state of this search node
+        private SearchNode prev; // previous world state of this search node
+
+        /* second optimization, by caching the estimation
+        to avoid repeatedly call the time-consuming estimatedDistanceToGoal()
+         */
         int priority = Integer.MAX_VALUE;
 
-        public SearchNode(WorldState currIn, int movesIn, WorldState prevIn) {
+        public SearchNode(WorldState currIn, int movesIn, SearchNode prevIn) {
             curr = currIn;
             moves = movesIn;
             prev = prevIn;
             priority = moves + curr.estimatedDistanceToGoal();
         }
 
-        public WorldState getPrev() {
+        public SearchNode getPrevNode() {
             return prev;
         }
 
@@ -44,34 +48,36 @@ public class Solver {
      * puzzle using the A* algorithm. Assumes a solution exists.
      */
     public Solver(WorldState initial) {
-        Stack<WorldState> tmp = new Stack<>(); // cache solutions reversely
         MinPQ<SearchNode> searchNodes = new MinPQ<>(); // the PQ caches search nodes
+
+        SearchNode goal = null;
 
         searchNodes.insert(new SearchNode(initial, 0, null));
 
         while (!searchNodes.isEmpty()) {
-            SearchNode currMin = searchNodes.delMin(); // remove node with minimum priority
-            WorldState prev = currMin.getPrev();
-            WorldState curr = currMin.getWorldState();
-            int currMoves = currMin.getMoves();
-            tmp.push(curr);
-            if (curr.isGoal()) {
+            SearchNode currNode = searchNodes.delMin(); // remove node with minimum priority
+            SearchNode prevNode = currNode.getPrevNode();
+            WorldState currWorld = currNode.getWorldState();
+            int moves = currNode.getMoves();
+            if (currWorld.isGoal()) {
+                goal = currNode;
                 break;
             }
             else {
-                for (WorldState neighbor : curr.neighbors()) {
-                    if (prev == null || !neighbor.equals(prev)) {
+                for (WorldState n : currWorld.neighbors()) {
+                    if (prevNode == null || !n.equals(prevNode.getWorldState())) {
                         /* !neighbor.equals(prev):
                         the critical optimization to avoid same node enqueue many times
                          */
-                        searchNodes.insert(new SearchNode(neighbor, currMoves + 1, curr));
+                        searchNodes.insert(new SearchNode(n, moves + 1, currNode));
                     }
                 }
             }
         }
 
-        while (!tmp.isEmpty()) {
-            solutions.push(tmp.pop());
+        while (goal != null) {
+            solutions.push(goal.getWorldState());
+            goal = goal.getPrevNode();
         }
     }
 
@@ -79,7 +85,7 @@ public class Solver {
      * puzzle starting at the initial WorldState.
      */
     public int moves() {
-        return solutions.size();
+        return solutions.size() - 1;
     }
 
     /** Returns a sequence of WorldStates from the initial WorldState
