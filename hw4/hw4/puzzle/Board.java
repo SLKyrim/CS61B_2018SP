@@ -7,7 +7,6 @@ public class Board implements WorldState {
     private final int BLANK = 0; // namely the position that can move to
     private int[][] board;
     private int size; // cache the size of the board
-    private int[][] goal; // cache the goal of the puzzle from the board
 
     /** Constructs a board from an N-by-N array of tiles where
      * tiles[i][j] = tile at row i, column j
@@ -19,14 +18,11 @@ public class Board implements WorldState {
             throw new IllegalArgumentException("input tiles must be square");
         }
         board = new int[size][size];
-        goal = new int[size][size];
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 board[i][j] = tiles[i][j];
-                goal[i][j] = i + j + 1;
             }
         }
-        goal[size - 1][size - 1] = 0;
     }
 
     /** Returns value of tile at row i, column j (or 0 if blank) */
@@ -82,12 +78,14 @@ public class Board implements WorldState {
 
     /** Hamming estimate
      * returns the number of tiles in the wrong position
+     * @source https://github.com/btke/CS61B-Spring-2018
      */
-    public int hamming(int[][] currBoard) {
+    public int hamming() {
         int res = 0;
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                if (currBoard[i][j] != goal[i][j]) {
+                int currPos = i * size + j + 1;
+                if (tileAt(i, j) != BLANK && tileAt(i, j) != currPos) {
                     res += 1;
                 }
             }
@@ -99,25 +97,19 @@ public class Board implements WorldState {
      * returns the sum of the Manhattan distances (sun
      * of the vertical and horizontal distance) from the
      * tiles to their goal positions.
+     * @source https://github.com/btke/CS61B-Spring-2018
      */
-    public int manhattan(int[][] currBoard) {
+    public int manhattan() {
         int res = 0;
-        int[][] tmp = new int[size * size][2]; // cache correct position coordinates
+
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                tmp[i * size + j][0] = i;
-                tmp[i * size + j][1] = j;
-            }
-        }
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                if (board[i][j] == 0) {
-                    res += Math.abs(i - tmp[size * size - 1][0]);
-                    res += Math.abs(j - tmp[size * size - 1][1]);
-                }
-                else {
-                    res += Math.abs(i - tmp[board[i][j] - 1][0]);
-                    res += Math.abs(j - tmp[board[i][j] - 1][1]);
+                int currPos = tileAt(i, j);
+                if (currPos != BLANK) {
+                    int expectedRow = (currPos - 1) / size;
+                    int expectedCol = (currPos - 1) % size;
+                    res += Math.abs(i - expectedRow);
+                    res += Math.abs(j - expectedCol);
                 }
             }
         }
@@ -129,7 +121,7 @@ public class Board implements WorldState {
      */
     @Override
     public int estimatedDistanceToGoal() {
-        return manhattan(this.board);
+        return manhattan();
     }
 
     /** returns true if this board's tile values are the same
@@ -144,12 +136,18 @@ public class Board implements WorldState {
             return false;
         }
 
-        Board board1 = (Board) o;
-
-        if (board != null ? !board.equals(board1.board) : board1.board != null) {
+        Board boardToCompare = (Board) o;
+        if (boardToCompare.size() != size) {
             return false;
         }
-        return goal != null ? goal.equals(board1.goal) : board1.goal == null;
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (boardToCompare.tileAt(i, j) != tileAt(i, j)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
 
