@@ -1,5 +1,6 @@
 package hw4.puzzle;
 
+import edu.princeton.cs.algs4.MaxPQ;
 import edu.princeton.cs.algs4.Queue;
 
 public class Board implements WorldState {
@@ -30,6 +31,9 @@ public class Board implements WorldState {
 
     /** Returns value of tile at row i, column j (or 0 if blank) */
     public int tileAt(int i, int j) {
+        if (i < 0 || i >= size || j < 0 || j >= size) {
+            throw new IndexOutOfBoundsException("tile index out of bounds");
+        }
         return board[i][j];
     }
 
@@ -79,8 +83,16 @@ public class Board implements WorldState {
     /** Hamming estimate
      * returns the number of tiles in the wrong position
      */
-    public int hamming() {
-        return 0;
+    public int hamming(int[][] currBoard) {
+        int res = 0;
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (currBoard[i][j] != goal[i][j]) {
+                    res += 1;
+                }
+            }
+        }
+        return res;
     }
 
     /** Manhattan estimate
@@ -88,8 +100,28 @@ public class Board implements WorldState {
      * of the vertical and horizontal distance) from the
      * tiles to their goal positions.
      */
-    public int manhattan() {
-        return 0;
+    public int manhattan(int[][] currBoard) {
+        int res = 0;
+        int[][] tmp = new int[size * size][2]; // cache correct position coordinates
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                tmp[i * size + j][0] = i;
+                tmp[i * size + j][1] = j;
+            }
+        }
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (board[i][j] == 0) {
+                    res += Math.abs(i - tmp[size * size - 1][0]);
+                    res += Math.abs(j - tmp[size * size - 1][1]);
+                }
+                else {
+                    res += Math.abs(i - tmp[board[i][j] - 1][0]);
+                    res += Math.abs(j - tmp[board[i][j] - 1][1]);
+                }
+            }
+        }
+        return res;
     }
 
     /** estimated distance to goal. This method should simply
@@ -97,15 +129,27 @@ public class Board implements WorldState {
      */
     @Override
     public int estimatedDistanceToGoal() {
-        return 0;
+        return manhattan(this.board);
     }
 
     /** returns true if this board's tile values are the same
-     * position as y's
+     * position as o's
      */
     @Override
     public boolean equals(Object o) {
-        return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Board board1 = (Board) o;
+
+        if (board != null ? !board.equals(board1.board) : board1.board != null) {
+            return false;
+        }
+        return goal != null ? goal.equals(board1.goal) : board1.goal == null;
     }
 
 
