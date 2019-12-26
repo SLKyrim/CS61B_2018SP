@@ -3,10 +3,14 @@ import org.xml.sax.SAXException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import javax.swing.*;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Graph for storing all of the intersection (vertex) and road (edge) information.
@@ -20,6 +24,7 @@ import java.util.ArrayList;
 public class GraphDB {
     /** Your instance variables for storing the graph. You should consider
      * creating helper classes, e.g. Node, Edge, etc. */
+    private Map<Long, Node> berkeley;
 
     /**
      * Example constructor shows how to create and start an XML parser.
@@ -28,6 +33,7 @@ public class GraphDB {
      */
     public GraphDB(String dbPath) {
         try {
+            berkeley = new HashMap();
             File inputFile = new File(dbPath);
             FileInputStream inputStream = new FileInputStream(inputFile);
             // GZIPInputStream stream = new GZIPInputStream(inputStream);
@@ -57,7 +63,14 @@ public class GraphDB {
      *  we can reasonably assume this since typically roads are connected.
      */
     private void clean() {
-        // TODO: Your code here.
+        // DONE: Your code here.
+        Object[] nodes = berkeley.keySet().toArray();
+        for (int i = 0; i < nodes.length; i++) {
+            Node curr = berkeley.get(nodes[i]);
+            if (curr.getConnections().size() == 0) {
+                berkeley.remove(curr.getId());
+            }
+        }
     }
 
     /**
@@ -65,8 +78,7 @@ public class GraphDB {
      * @return An iterable of id's of all vertices in the graph.
      */
     Iterable<Long> vertices() {
-        //YOUR CODE HERE, this currently returns only an empty list.
-        return new ArrayList<Long>();
+        return berkeley.keySet();
     }
 
     /**
@@ -75,7 +87,7 @@ public class GraphDB {
      * @return An iterable of the ids of the neighbors of v.
      */
     Iterable<Long> adjacent(long v) {
-        return null;
+        return berkeley.get(v).getConnections();
     }
 
     /**
@@ -136,7 +148,18 @@ public class GraphDB {
      * @return The id of the node in the graph closest to the target.
      */
     long closest(double lon, double lat) {
-        return 0;
+        Object[] nodes = berkeley.keySet().toArray();
+        double minDist = Double.MAX_VALUE;
+        long minId = 0;
+        for (int i = 0; i < nodes.length; i++) {
+            Node curr = berkeley.get(nodes[i]);
+            double currDist = distance(lon, lat, curr.getLon(), curr.getLat());
+            if (currDist < minDist) {
+                minDist = currDist;
+                minId = curr.getId();
+            }
+        }
+        return minId;
     }
 
     /**
@@ -145,7 +168,7 @@ public class GraphDB {
      * @return The longitude of the vertex.
      */
     double lon(long v) {
-        return 0;
+        return berkeley.get(v).getLon();
     }
 
     /**
@@ -154,6 +177,30 @@ public class GraphDB {
      * @return The latitude of the vertex.
      */
     double lat(long v) {
-        return 0;
+        return berkeley.get(v).getLat();
+    }
+
+    public void addNode(Node n) {
+        berkeley.put(n.getId(), n);
+    }
+
+    public void addConnections(Edge way) {
+        List<Long> nodes = way.getNodes();
+        if (nodes.size() == 2) {
+            Node first = berkeley.get(nodes.get(0));
+            Node second = berkeley.get(nodes.get(1));
+            first.addConnection(second.getId());
+            second.addConnection(first.getId());
+        } else {
+            for (int i = 1; i < nodes.size() - 1; i++) {
+                Node curr = berkeley.get(nodes.get(i));
+                Node prev = berkeley.get(nodes.get(i - 1));
+                Node next = berkeley.get(nodes.get(i + 1));
+                curr.addConnection(prev.getId());
+                curr.addConnection(next.getId());
+                prev.addConnection(curr.getId());
+                next.addConnection(curr.getId());
+            }
+        }
     }
 }
