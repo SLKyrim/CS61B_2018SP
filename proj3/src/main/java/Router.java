@@ -1,4 +1,9 @@
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.PriorityQueue;
+import java.util.ArrayList;
+import java.util.Objects;
+import java.util.Comparator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,7 +32,7 @@ public class Router {
 
         Node start = g.getNode(g.closest(stlon, stlat));
         Long startID = start.getId();
-        Node dest = g.getNode(g.closest(destlon,destlat));
+        Node dest = g.getNode(g.closest(destlon, destlat));
         Long destID = dest.getId();
 
         // The distance(Double) from start to the vertex with a id(Long)
