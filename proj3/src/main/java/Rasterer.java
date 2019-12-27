@@ -58,12 +58,12 @@ public class Rasterer {
         double requestHeight = params.get("h");
         double requestULLat = params.get("ullat");
         double requestLRLat = params.get("lrlat");
-        boolean query_success = true;
+        boolean querySuccess = true;
 
         // query success
         Map<String, Object> results = new HashMap<>();
         if (!checkQuery(requestULLon, requestLRLon, requestULLat, requestLRLat)) {
-            query_success = false;
+            querySuccess = false;
         }
         // Longitudinal distance per pixel in query box
         double requestLonDPP = (requestLRLon - requestULLon) / requestWidth;
@@ -71,37 +71,43 @@ public class Rasterer {
         int depth = calcDepth(requestLonDPP);
         // Raster parameters
         int rasterULLonNum = calcRasterParamNum(depth, requestULLon, rootULLon, rootLRLon);
-        double rasterULLon = calcRasterParam(depth, rasterULLonNum, rootULLon, rootLRLon, true, true);
+        double rasterULLon =
+                calcRasterParam(depth, rasterULLonNum, rootULLon, rootLRLon, true, true);
         int rasterULLatNum = calcRasterParamNum(depth, requestULLat, rootULLat, rootLRLat);
-        double rasterULLat = calcRasterParam(depth, rasterULLatNum, rootULLat, rootLRLat, true, false);
+        double rasterULLat =
+                calcRasterParam(depth, rasterULLatNum, rootULLat, rootLRLat, true, false);
         int rasterLRLonNum = calcRasterParamNum(depth, requestLRLon, rootULLon, rootLRLon);
-        double rasterLRLon = calcRasterParam(depth, rasterLRLonNum, rootULLon, rootLRLon, false, true);
+        double rasterLRLon =
+                calcRasterParam(depth, rasterLRLonNum, rootULLon, rootLRLon, false, true);
         int rasterLRLatNum = calcRasterParamNum(depth, requestLRLat, rootULLat, rootLRLat);
-        double rasterLRLat = calcRasterParam(depth, rasterLRLatNum, rootULLat, rootLRLat, false, false);
+        double rasterLRLat =
+                calcRasterParam(depth, rasterLRLatNum, rootULLat, rootLRLat, false, false);
         // Raster grid
         int rowNum = rasterLRLatNum - rasterULLatNum + 1;
         int colNum = rasterLRLonNum - rasterULLonNum + 1;
-        String[][] render_grid = new String[rowNum][colNum];
+        String[][] renderGrid = new String[rowNum][colNum];
         for (int i = 0; i < rowNum; i++) {
             for (int j = 0; j < colNum; j++) {
-                render_grid[i][j] = "d" + depth + "_x" + (j + rasterULLonNum) + "_y" + (i + rasterULLatNum) + ".png";
+                int tmpX = j + rasterULLonNum;
+                int tmpY = i + rasterULLatNum;
+                renderGrid[i][j] = "d" + depth + "_x" + tmpX + "_y" + tmpY + ".png";
             }
         }
 
-        results.put("render_grid", render_grid);
+        results.put("render_grid", renderGrid);
         results.put("raster_ul_lon", rasterULLon);
         results.put("raster_ul_lat", rasterULLat);
         results.put("raster_lr_lon", rasterLRLon);
         results.put("raster_lr_lat", rasterLRLat);
         results.put("depth", depth);
-        results.put("query_success", query_success);
+        results.put("query_success", querySuccess);
 
         return results;
     }
 
-    private boolean checkQuery(double ULLon, double LRLon, double ULLat, double LRLat) {
-        boolean isLonLegal = (ULLon >= rootULLon || LRLon <= rootLRLon) && LRLon > ULLon;
-        boolean isLatLegal = (ULLat <= rootULLat || LRLat >= rootLRLat) && LRLat < ULLat;
+    private boolean checkQuery(double ullon, double lrlon, double ullat, double lrlat) {
+        boolean isLonLegal = (ullon >= rootULLon || lrlon <= rootLRLon) && lrlon > ullon;
+        boolean isLatLegal = (ullat <= rootULLat || lrlat >= rootLRLat) && lrlat < ullat;
         return isLonLegal && isLatLegal;
     }
 
@@ -152,7 +158,8 @@ public class Rasterer {
      * @param isLon
      * @return
      */
-    private double calcRasterParam(int depth, int rasterParamNum, double rootUL, double rootLR, boolean isUL, boolean isLon) {
+    private double calcRasterParam(int depth, int rasterParamNum,
+                                   double rootUL, double rootLR, boolean isUL, boolean isLon) {
         int bound = (int) (Math.pow(2, depth) - 1);
         double currTileSize = Math.abs(rootUL - rootLR) / (bound + 1);
         double rasterParam;

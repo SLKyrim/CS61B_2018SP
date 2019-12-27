@@ -11,8 +11,8 @@ public class Edge {
         nodes = new ArrayList<>();
     }
 
-    public void addNode(long id) {
-        nodes.add(id);
+    public void addNode(long i) {
+        nodes.add(i);
     }
 
     public List<Long> getNodes() {

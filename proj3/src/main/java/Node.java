@@ -30,9 +30,9 @@ public class Node {
         return connections;
     }
 
-    public void addConnection(long id) {
-        if (!connections.contains(id) && id != this.id) {
-            connections.add(id);
+    public void addConnection(long i) {
+        if (!connections.contains(i) && i != this.id) {
+            connections.add(i);
         }
     }
 }
