@@ -184,6 +184,14 @@ public class GraphDB {
         berkeley.put(n.getId(), n);
     }
 
+    /** Gets the Node of which the id is v.
+     * @param v the id of the vertex.
+     * @return the Node of which the id is v.
+     */
+    public Node getNode(long v) {
+        return berkeley.get(v);
+    }
+
     public void addConnections(Edge way) {
         List<Long> nodes = way.getNodes();
         if (nodes.size() == 2) {

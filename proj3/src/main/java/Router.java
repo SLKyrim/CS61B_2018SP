@@ -1,5 +1,4 @@
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,7 +24,75 @@ public class Router {
      */
     public static List<Long> shortestPath(GraphDB g, double stlon, double stlat,
                                           double destlon, double destlat) {
-        return null; // FIXME
+
+        Node start = g.getNode(g.closest(stlon, stlat));
+        Long startID = start.getId();
+        Node dest = g.getNode(g.closest(destlon,destlat));
+        Long destID = dest.getId();
+
+        // The distance(Double) from start to the vertex with a id(Long)
+        HashMap<Long, Double> distTo = new HashMap<>();
+        // the edge between a vertex with a id(Long) and another one with a id(Long)
+        HashMap<Long, Long> edges = new HashMap<>();
+
+        class SearchNode implements Comparator<Node> {
+            @Override
+            public int compare(Node o1, Node o2) {
+                // Compare the A* distance (= distance to start + distance to destination)
+                double disto1 = distTo.get(o1.getId()) + g.distance(o1.getId(), destID);
+                double disto2 = distTo.get(o2.getId()) + g.distance(o2.getId(), destID);
+                return Double.compare(disto1, disto2);
+            }
+        }
+
+        // Sorts the nodes in the queue by priority of SearchNode
+        PriorityQueue<Node> fringe = new PriorityQueue<>(new SearchNode());
+
+        // Initialize the distTo, edges and fringe
+        for (Long v : g.vertices()) {
+            if (v.equals(startID)) {
+                distTo.put(v, 0.0); // first to remove will be the start vertex
+            } else {
+                distTo.put(v, Double.MAX_VALUE);
+            }
+            edges.put(v, 0L);
+            fringe.add(g.getNode(v));
+        }
+
+        boolean isReached = false;
+        ArrayList<Long> path = new ArrayList<>();
+
+        while (!isReached && !fringe.isEmpty()) {
+            Node curr = fringe.remove();
+            Long currID = curr.getId();
+            for (Long v : g.adjacent(currID)) {
+                Double currDist = distTo.get(currID) + g.distance(v, currID);
+                if (distTo.get(v) > currDist) {
+                    distTo.replace(v, currDist); // update the distance from start to vertex v
+                    edges.replace(v, currID); // build a connection between current vertex and v
+                    /* update fringe by removing the old Node with a DOUBLE.MAX_VALUE
+                    distance and adding the new Node with the same id as the old Node
+                    with the updated distance
+                     */
+                    fringe.remove(g.getNode(v));
+                    // next loop the node with the smallest currDist will be removed to be curr
+                    fringe.add(g.getNode(v));
+                }
+                if (v.equals(destID)) {
+                    isReached = true;
+                }
+            }
+        }
+
+        Long currID = destID;
+
+        while (!currID.equals(startID) && !currID.equals(0L)) {
+            path.add(0, currID);
+            currID = edges.get(currID);
+        }
+        path.add(0, startID);
+
+        return path;
     }
 
     /**
